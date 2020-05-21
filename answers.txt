@@ -38,9 +38,17 @@ from doing any work by preventing processes from accessing resources.
    Suppose we have 4 processes on a system, each of which has 512MB worth of virtual address space mapped.
    Just show the numbers you would use and simplify as much as you can.
    (a) How much memory is used to store the page directories and page tables if 4KB pages are used?
-   (b) If 4MB pages (super pages) are used, then the entries in th page directory point directly to the
+        1st level page table (i.e. page directory) = 4KB
+        Each page table address 4MB. For one process that maps 512MB virtual addresses,
+        512/4 MB needed: 128. 
+        (128MB * 0.004MB (size of each page table)) + 0.004MB =  0.516MB
+        4 processes on a system: 0.516 * 4 = 2.06MB.
+   (b) If 4MB pages (super pages) are used, then the entries in the page directory point directly to the
        page frame (i.e., no second-level page tables are used). How much memory would be taken up by page 
        directories in this case?
+        (512 / 4) * 4 = 512MB is mapped in one direcotry.
+        If 4MB pages are used then, 512MB would be required to be mapped to memory for all 4 processes.
+        This can be mapped in one directory i.e. 4MB page.
 
 4. Consider the following program:
     int main(int argc, char **argv) {
@@ -60,5 +68,7 @@ from doing any work by preventing processes from accessing resources.
         0x1004 winner
         0x1008 saved EBP
         0x100c return address
-    This program has a buffer overflow. FInd it, and use it to give an input (i.e. a value fo argv[1]) that 
+    This program has a buffer overflow. Find it, and use it to give an input (i.e. a value for argv[1]) that 
     will cause the program to print "You win!".
+        Buffer overflow is with - magic[4] 
+        input - 00001. The '1' will set winner to 1 and print "You win!"
