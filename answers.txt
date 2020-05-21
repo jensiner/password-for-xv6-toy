@@ -1,6 +1,22 @@
 1. What are some differences between a semaphore and a spinlock()? Give some examples on when to use each.
 
-
+While both deal with issues of synchronization, spinlock() is usually used to deal with multiple threads 
+trying to use a resource within a single process, whereas semaphores deal with multiple processes attempting 
+to use a single resource. Spinklock() is a means of mutual exclusion and busy wait. Only one process can access 
+a resource at a single time and if the resource is not available then the CPU will be busy trying to access it. 
+This can result in a deadlock, in which nothing can be done. Semaphores allow multiple threads to use a resource at 
+a time by making a process go to sleep when a resource it needs is not available and wake it up to try 
+accessing the resource later, this frees up CPU. If a resource gets free, spinlock() will allow the process
+waiting access immediately, while with semaphores, the process must be waken up before it can see whehter the 
+resource is freed. Semaphores are a much more efficient use of CPU cycles when multiple threads from multiple 
+processes will use a single resource at the same time.
+Spinlock() is used when it is more efficient because the overhead is much less than that of context switching. 
+This happens when there is low congestion, meaning few processes will likely access the resouce and when any do, 
+it will give up the resource quickly. This happens when a spinlock() is used by a logical processor as opposed to
+a system thread. A logical processor would disable interuppts while using the resource. When interuppts are 
+disabled, no other thread in the process will attempt to access the resource at the same time and threads from 
+other processes will be blocked. Semaphores are used wen there is high congestion so as not to stop all processes
+from doing any work by preventing processes from accessing resources.
 
 2. Suppose we have a filesystem with a block size of 512 bytes and i-node defined as follows:
     #define BLOCKSIZE 512
@@ -15,8 +31,8 @@
     }
     That is, it has 16 direct block pointers and one indirect block pointer. What size (in bytes) is the 
     largest file we can create using this system and why?
-
-
+    (16 + 1) * 512 bytes = 8.7 KB. The i-node struct stores 16 direct block pointers and 1 indirect 
+    block pointer. Each block has 512 bytes. That's 17 blocks * 512 bytes, which is 8,700 bytes or 8.7 KB.
 
 3. Recall that in 32-bit x86, page directories and page tables are each made up of 1024 32-bit entries. 
    Suppose we have 4 processes on a system, each of which has 512MB worth of virtual address space mapped.

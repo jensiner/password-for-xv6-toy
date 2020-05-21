@@ -75,9 +75,6 @@ int
 main(void)
 {
 
-  // no password created
-  int pass_created = 0;
-
   int pid, wpid;
 
   if(open("console", O_RDWR) < 0){
@@ -90,16 +87,9 @@ main(void)
   int fd = open("passwords", O_RDWR);
   if (fd < 0) { // no password
     close(fd);
-    fd = open("passwords", O_CREATE|O_RDWR);
-  }
-  else { // password already made
-    pass_created = 1; 
-  }
-
-  while (!pass_created) {
     printf(0, "No password set. Please choose one.\n");
+    fd = open("passwords", O_CREATE|O_RDWR);
     setPassword(fd);
-    pass_created = 1;
   }
 
   login();
