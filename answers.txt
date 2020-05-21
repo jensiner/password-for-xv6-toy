@@ -1,0 +1,48 @@
+1. What are some differences between a semaphore and a spinlock()? Give some examples on when to use each.
+
+
+
+2. Suppose we have a filesystem with a block size of 512 bytes and i-node defined as follows:
+    #define BLOCKSIZE 512
+    struct inode {
+        short type;
+        short major;
+        short minor;
+        short nlink;
+        uint size;
+        uint blocks[16];
+        uint indirect;
+    }
+    That is, it has 16 direct block pointers and one indirect block pointer. What size (in bytes) is the 
+    largest file we can create using this system and why?
+
+
+
+3. Recall that in 32-bit x86, page directories and page tables are each made up of 1024 32-bit entries. 
+   Suppose we have 4 processes on a system, each of which has 512MB worth of virtual address space mapped.
+   Just show the numbers you would use and simplify as much as you can.
+   (a) How much memory is used to store the page directories and page tables if 4KB pages are used?
+   (b) If 4MB pages (super pages) are used, then the entries in th page directory point directly to the
+       page frame (i.e., no second-level page tables are used). How much memory would be taken up by page 
+       directories in this case?
+
+4. Consider the following program:
+    int main(int argc, char **argv) {
+        char magic[4];
+        int winner = 0; 
+        // Copy command line input into magic var 
+        strcpy(magic, argv[1]);
+        // Do secret computation to check for magic value
+        if (((magic[0] * 0x2115) + (magic[1] * 1222) ^ magic[2] << 3)) == 0xbeef)   
+            winner = 1;
+        if (winner) printf("You win!\n");
+        else printf("You lose\n");
+        return 0;
+    }
+    When run, the stack layout for the main function looks like:
+        0x1000 magic[4]
+        0x1004 winner
+        0x1008 saved EBP
+        0x100c return address
+    This program has a buffer overflow. FInd it, and use it to give an input (i.e. a value fo argv[1]) that 
+    will cause the program to print "You win!".
