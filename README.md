@@ -1,3 +1,6 @@
+# About
+Made the toy operating system xv6 password protected for Operating Systems class.
+
 # VSCode Integration
 
 ## Compiling
